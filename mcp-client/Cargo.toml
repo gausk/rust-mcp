@@ -1,0 +1,15 @@
+[package]
+name = "mcp-client"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tokio = { workspace = true }
+rmcp = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+
+[[example]]
+name = "simple-client"
+path = "src/client.rs"
