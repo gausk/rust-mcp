@@ -47,13 +47,12 @@ impl Calculator {
         let request = parameters.0;
         (request.a - request.b).to_string()
     }
-
 }
 
 #[tool_handler]
 impl ServerHandler for Calculator {
     fn get_info(&self) -> ServerInfo {
-       ServerInfo {
+        ServerInfo {
             instructions: Some("A simple calculator".into()),
             capabilities: ServerCapabilities::builder().enable_tools().build(),
             ..Default::default()

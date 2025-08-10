@@ -1,8 +1,5 @@
 use rmcp::{
-    RmcpError,
-    model::CallToolRequestParam,
-    service::ServiceExt,
-    transport::{ConfigureCommandExt, TokioChildProcess},
+    RmcpError, model::CallToolRequestParam, service::ServiceExt, transport::TokioChildProcess,
 };
 use tokio::process::Command;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -20,11 +17,9 @@ async fn main() -> Result<(), RmcpError> {
     let client = ()
         .serve(
             TokioChildProcess::new(Command::new("target/debug/examples/calculator-stdio"))
-            .map_err(RmcpError::transport_creation::<TokioChildProcess>)?,
+                .map_err(RmcpError::transport_creation::<TokioChildProcess>)?,
         )
         .await?;
-
-    // or serve_client((), TokioChildProcess::new(cmd)?).await?;
 
     // Initialize
     let server_info = client.peer_info();
@@ -34,14 +29,23 @@ async fn main() -> Result<(), RmcpError> {
     let tools = client.list_tools(Default::default()).await?;
     tracing::info!("Available tools: {tools:#?}");
 
-    // Call tool 'git_status' with arguments = {"repo_path": "."}
+    // Call tool 'add' with arguments = { "a": 2, "b": 3 }
     let tool_result = client
         .call_tool(CallToolRequestParam {
-            name: "git_status".into(),
-            arguments: serde_json::json!({ "repo_path": "." }).as_object().cloned(),
+            name: "add".into(),
+            arguments: serde_json::json!({ "a": 2, "b": 3 }).as_object().cloned(),
         })
         .await?;
-    tracing::info!("Tool result: {tool_result:#?}");
+    tracing::info!("Tool result for add: {tool_result:#?}");
+
+    // Call tool 'subtract' with arguments = { "a": 5, "b": 2 }
+    let tool_result = client
+        .call_tool(CallToolRequestParam {
+            name: "subtract".into(),
+            arguments: serde_json::json!({ "a": 5, "b": 2 }).as_object().cloned(),
+        })
+        .await?;
+    tracing::info!("Tool result for subtract: {tool_result:#?}");
     client.cancel().await?;
     Ok(())
 }
