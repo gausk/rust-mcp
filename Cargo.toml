@@ -9,6 +9,11 @@ resolver = "3"
 tokio = { version = "1", features = ["full"] }
 rmcp = { version = "0.3", features = ["client", "transport-child-process", "transport-io"]}
 serde_json = { version = "1.0" }
-serde = { version = "1.0" }
+serde = { version = "1.0", features = ["derive"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "*"
+async-trait = "*"
+reqwest = { version = "*", features = ["json"] }
+clap = { version = "4.0", features = ["derive"] }
+toml = "0.9"
